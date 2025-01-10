@@ -19,6 +19,7 @@ type ILinkService interface {
 	Create(request api.CreateLinkRequest) (api.CreateLinkResponse, error)
 	Update(request api.UpdateLinkRequest, id string) (api.UpdateLinkResponse, error)
 	GetById(id string) (api.GetLinkByIdResponse, error)
+	Delete(id string) (api.DeleteLinkResponse, error)
 }
 
 type LinkService struct {
@@ -71,4 +72,16 @@ func (this *LinkService) Update(request api.UpdateLinkRequest, id string) (api.U
 		links[id].Original = request.Original
 		return api.UpdateLinkResponse{Link: *links[id]}, nil
 	}
+}
+
+func (this *LinkService) Delete(id string) (api.DeleteLinkResponse, error) {
+	lock.Lock()
+	defer lock.Unlock()
+	if linkToDelete, exists := links[id]; !exists {
+		return api.DeleteLinkResponse{}, errors.New("link does not exist")
+	} else {
+		delete(links, id)
+		return api.DeleteLinkResponse{Link: *linkToDelete}, nil
+	}
+
 }

@@ -6,8 +6,8 @@ import (
 
 // Get all links
 type GetAllLinksRequest struct {
-	Page     int `query:"page"`     // page number
-	PageSize int `query:"pageSize"` // results per page
+	Page     int `query:"page" validate:"number,gte=0"`     // page number
+	PageSize int `query:"pageSize" validate:"number,gte=0"` // results per page
 }
 type GetAllLinksResponse struct {
 	Links    []models.Link `json:"links"`    // links results array
@@ -23,7 +23,7 @@ type GetLinkByIdResponse struct {
 
 // Create link
 type CreateLinkRequest struct {
-	Original string `json:"original"` // original url of the link
+	Original string `json:"original" validate:"required,url"` // original url of the link
 }
 type CreateLinkResponse struct {
 	Link models.Link `json:"link"` // created link
@@ -31,8 +31,13 @@ type CreateLinkResponse struct {
 
 // Update link
 type UpdateLinkRequest struct {
-	Original string `json:"original"` // original url of the link
+	Original string `json:"original" validate:"required,url"` // original url of the link
 }
 type UpdateLinkResponse struct {
 	Link models.Link `json:"link"` // created link
+}
+
+// Delete link
+type DeleteLinkResponse struct {
+	Link models.Link `json:"link"` // deleted link
 }

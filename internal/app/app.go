@@ -4,7 +4,9 @@ import (
 	"sync"
 
 	"github.com/LeonYalin/golang-todo-list-app/internal/controllers"
+	"github.com/LeonYalin/golang-todo-list-app/internal/helpers"
 	"github.com/LeonYalin/golang-todo-list-app/internal/services"
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,6 +22,7 @@ func NewApp() *App {
 		e := echo.New()
 		e.File("/", "static/index.html")
 		e.Static("/js", "static/js")
+		e.Validator = &helpers.RequestValidator{Validator: validator.New()}
 
 		// link routes
 		linkService := services.NewLinkService()
@@ -29,6 +32,7 @@ func NewApp() *App {
 		g.GET("/:id", linkController.GetById)
 		g.POST("", linkController.Create)
 		g.PUT("/:id", linkController.Update)
+		g.DELETE("/:id", linkController.Delete)
 
 		app = &App{
 			e: e,

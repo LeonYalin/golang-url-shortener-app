@@ -48,6 +48,9 @@ func (this *LinkController) Create(c echo.Context) error {
 	if err := c.Bind(&request); err != nil {
 		return err
 	}
+	if err := c.Validate(request); err != nil {
+		return err
+	}
 	createdLink, err := this.service.Create(request)
 	if err != nil {
 		return err
@@ -63,10 +66,24 @@ func (this *LinkController) Update(c echo.Context) error {
 	if err := c.Bind(&request); err != nil {
 		return err
 	}
+	if err := c.Validate(request); err != nil {
+		return err
+	}
 	updatedLink, err := this.service.Update(request, id)
 	if err != nil {
 		return err
 	}
 	slog.Info("(LinkController:Update)", slog.Any("updated_link", updatedLink))
 	return c.JSON(http.StatusOK, updatedLink)
+}
+
+func (this *LinkController) Delete(c echo.Context) error {
+	id := c.Param("id")
+	slog.Info("(LinkController:Delete) enter", slog.Any("id", id))
+	deletedLink, err := this.service.Delete(id)
+	if err != nil {
+		return err
+	}
+	slog.Info("(LinkController:Delete)", slog.Any("deleted_link", deletedLink))
+	return c.JSON(http.StatusOK, deletedLink)
 }
