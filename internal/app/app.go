@@ -25,14 +25,15 @@ func NewApp() *App {
 		e.Validator = &helpers.RequestValidator{Validator: validator.New()}
 
 		// link routes
-		linkService := services.NewLinkService()
+		linkRepo := services.NewLinkRepository()
+		linkService := services.NewLinkService(linkRepo)
 		linkController := controllers.NewLinkController(linkService)
 		g := e.Group("/links")
-		g.GET("", linkController.GetAll)
-		g.GET("/:id", linkController.GetById)
-		g.POST("", linkController.Create)
-		g.PUT("/:id", linkController.Update)
-		g.DELETE("/:id", linkController.Delete)
+		g.GET("", linkController.GetAllLinks)
+		g.GET("/:id", linkController.GetLinkById)
+		g.POST("", linkController.CreateLink)
+		g.PUT("/:id", linkController.UpdateLink)
+		g.DELETE("/:id", linkController.DeleteLink)
 
 		app = &App{
 			e: e,

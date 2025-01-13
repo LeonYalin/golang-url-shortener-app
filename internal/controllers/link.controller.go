@@ -17,33 +17,33 @@ func NewLinkController(service services.ILinkService) *LinkController {
 	return &LinkController{service: service}
 }
 
-func (this *LinkController) GetAll(c echo.Context) error {
-	slog.Info("(LinkController:GetAll) enter")
+func (this *LinkController) GetAllLinks(c echo.Context) error {
+	slog.Info("(LinkController:GetAllLinks) enter")
 	request := api.GetAllLinksRequest{}
 	if err := c.Bind(&request); err != nil {
 		return err
 	}
-	links, err := this.service.Get(request)
+	links, err := this.service.GetAllLinks(request)
 	if err != nil {
 		return err
 	}
-	slog.Info("(LinkController:GetAll)", slog.Any("links", links))
+	slog.Info("(LinkController:GetAllLinks)", slog.Any("links", links))
 	return c.JSON(http.StatusOK, links)
 }
 
-func (this *LinkController) GetById(c echo.Context) error {
+func (this *LinkController) GetLinkById(c echo.Context) error {
 	id := c.Param("id")
-	slog.Info("(LinkController:GetById) enter", slog.Any("id", id))
-	requestedLink, err := this.service.GetById(id)
+	slog.Info("(LinkController:GetLinkById) enter", slog.Any("id", id))
+	requestedLink, err := this.service.GetLinkById(id)
 	if err != nil {
 		return err
 	}
-	slog.Info("(LinkController:GetById)", slog.Any("requested_link", requestedLink))
+	slog.Info("(LinkController:GetLinkById)", slog.Any("requested_link", requestedLink))
 	return c.JSON(http.StatusOK, requestedLink)
 }
 
-func (this *LinkController) Create(c echo.Context) error {
-	slog.Info("(LinkController:Create) enter")
+func (this *LinkController) CreateLink(c echo.Context) error {
+	slog.Info("(LinkController:CreateLink) enter")
 	request := api.CreateLinkRequest{}
 	if err := c.Bind(&request); err != nil {
 		return err
@@ -51,17 +51,17 @@ func (this *LinkController) Create(c echo.Context) error {
 	if err := c.Validate(request); err != nil {
 		return err
 	}
-	createdLink, err := this.service.Create(request)
+	createdLink, err := this.service.CreateLink(request)
 	if err != nil {
 		return err
 	}
-	slog.Info("(LinkController:Create)", slog.Any("created_link", createdLink))
+	slog.Info("(LinkController:CreateLink)", slog.Any("created_link", createdLink))
 	return c.JSON(http.StatusOK, createdLink)
 }
 
-func (this *LinkController) Update(c echo.Context) error {
+func (this *LinkController) UpdateLink(c echo.Context) error {
 	id := c.Param("id")
-	slog.Info("(LinkController:Update) enter", slog.Any("id", id))
+	slog.Info("(LinkController:UpdateLink) enter", slog.Any("id", id))
 	request := api.UpdateLinkRequest{}
 	if err := c.Bind(&request); err != nil {
 		return err
@@ -69,21 +69,21 @@ func (this *LinkController) Update(c echo.Context) error {
 	if err := c.Validate(request); err != nil {
 		return err
 	}
-	updatedLink, err := this.service.Update(request, id)
+	updatedLink, err := this.service.UpdateLink(request, id)
 	if err != nil {
 		return err
 	}
-	slog.Info("(LinkController:Update)", slog.Any("updated_link", updatedLink))
+	slog.Info("(LinkController:UpdateLink)", slog.Any("updated_link", updatedLink))
 	return c.JSON(http.StatusOK, updatedLink)
 }
 
-func (this *LinkController) Delete(c echo.Context) error {
+func (this *LinkController) DeleteLink(c echo.Context) error {
 	id := c.Param("id")
-	slog.Info("(LinkController:Delete) enter", slog.Any("id", id))
-	deletedLink, err := this.service.Delete(id)
+	slog.Info("(LinkController:DeleteLink) enter", slog.Any("id", id))
+	deletedLink, err := this.service.DeleteLink(id)
 	if err != nil {
 		return err
 	}
-	slog.Info("(LinkController:Delete)", slog.Any("deleted_link", deletedLink))
+	slog.Info("(LinkController:DeleteLink)", slog.Any("deleted_link", deletedLink))
 	return c.JSON(http.StatusOK, deletedLink)
 }
