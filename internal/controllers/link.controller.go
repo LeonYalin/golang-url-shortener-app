@@ -56,7 +56,7 @@ func (this *LinkController) CreateLink(c echo.Context) error {
 		return err
 	}
 	slog.Info("(LinkController:CreateLink)", slog.Any("created_link", createdLink))
-	return c.JSON(http.StatusOK, createdLink)
+	return c.JSON(http.StatusCreated, createdLink)
 }
 
 func (this *LinkController) UpdateLink(c echo.Context) error {

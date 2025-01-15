@@ -3,20 +3,29 @@ package services
 import "github.com/LeonYalin/golang-todo-list-app/api"
 
 type MockLinkService struct {
+	GetAllLinksFunc func(request api.GetAllLinksRequest) (api.GetAllLinksResponse, error)
+	CreateLinkFunc  func(request api.CreateLinkRequest) (api.CreateLinkResponse, error)
+	UpdateLinkFunc  func(request api.UpdateLinkRequest, id string) (api.UpdateLinkResponse, error)
+	GetLinkByIdFunc func(id string) (api.GetLinkByIdResponse, error)
+	DeleteLinkFunc  func(id string) (api.DeleteLinkResponse, error)
+}
+
+func NewMockLinkService() *MockLinkService {
+	return &MockLinkService{}
 }
 
 func (this *MockLinkService) GetAllLinks(request api.GetAllLinksRequest) (api.GetAllLinksResponse, error) {
-	return api.GetAllLinksResponse{}, nil
+	return this.GetAllLinksFunc(request)
 }
 func (this *MockLinkService) CreateLink(request api.CreateLinkRequest) (api.CreateLinkResponse, error) {
-	return api.CreateLinkResponse{}, nil
+	return this.CreateLinkFunc(request)
 }
 func (this *MockLinkService) UpdateLink(request api.UpdateLinkRequest, id string) (api.UpdateLinkResponse, error) {
-	return api.UpdateLinkResponse{}, nil
+	return this.UpdateLinkFunc(request, id)
 }
 func (this *MockLinkService) GetLinkById(id string) (api.GetLinkByIdResponse, error) {
-	return api.GetLinkByIdResponse{}, nil
+	return this.GetLinkByIdFunc(id)
 }
 func (this *MockLinkService) DeleteLink(id string) (api.DeleteLinkResponse, error) {
-	return api.DeleteLinkResponse{}, nil
+	return this.DeleteLinkFunc(id)
 }
