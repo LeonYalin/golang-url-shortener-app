@@ -4,12 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Url Shortener</title>
-    <script src="/js/src/index.js"></script>
+    <script src="/js/vendor/htmx.min.js"></script>
     <script src="/js/vendor/tailwindcss.js"></script>
   </head>
   <body>
-    <div class="text-3xl font-bold underline">
-      Hello from Golang URL Shortener App!
+    <div id="app">
+      <button hx-post="/htmx/links" hx-trigger="click" hx-swap="outerHTML">
+        Click Me!
+      </button>
     </div>
   </body>
 </html>

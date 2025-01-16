@@ -1,6 +1,7 @@
 package app
 
 import (
+	"html/template"
 	"sync"
 
 	"github.com/LeonYalin/golang-todo-list-app/internal/controllers"
@@ -20,11 +21,12 @@ var app *App
 func NewApp() *App {
 	once.Do(func() {
 		e := echo.New()
-		e.File("/", "static/index.html")
+		e.File("/", "public/index.html")
 		e.Static("/js", "static/js")
+		e.Renderer = &helpers.Template{Templates: template.Must(template.ParseGlob("public/views/*.html"))}
 		e.Validator = &helpers.RequestValidator{Validator: validator.New()}
 
-		// link routes
+		// link api routes
 		linkRepo := services.NewLinkRepository()
 		linkService := services.NewLinkService(linkRepo)
 		linkController := controllers.NewLinkController(linkService)
@@ -34,6 +36,11 @@ func NewApp() *App {
 		g.POST("", linkController.CreateLink)
 		g.PUT("/:id", linkController.UpdateLink)
 		g.DELETE("/:id", linkController.DeleteLink)
+
+		// link htmx routes
+		linkHtmxController := controllers.NewLinkHtmxController()
+		g2 := e.Group("/htmx")
+		g2.POST("/links", linkHtmxController.GetAllLinks)
 
 		app = &App{
 			e: e,
