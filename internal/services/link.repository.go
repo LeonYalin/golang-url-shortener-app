@@ -5,12 +5,11 @@ import (
 	"sync"
 
 	"github.com/LeonYalin/golang-todo-list-app/internal/models"
-	"github.com/google/uuid"
 )
 
 type ILinkRepository interface {
 	GetAll() (map[string]*models.Link, error)
-	Create(original string, short string) (*models.Link, error)
+	Create(id string, original string, short string) (*models.Link, error)
 	Update(id string, original string) (*models.Link, error)
 	GetById(id string) (*models.Link, error)
 	Delete(id string) (*models.Link, error)
@@ -34,10 +33,9 @@ func (this *LinkRepository) GetAll() (map[string]*models.Link, error) {
 	return this.links, nil
 }
 
-func (this *LinkRepository) Create(original string, short string) (*models.Link, error) {
+func (this *LinkRepository) Create(id string, original string, short string) (*models.Link, error) {
 	this.lock.Lock()
 	defer this.lock.Unlock()
-	id := uuid.NewString()
 	if _, exists := this.links[id]; exists {
 		return nil, errors.New("link already exists")
 	}

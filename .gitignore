@@ -21,6 +21,9 @@
 go.work
 go.work.sum
 
+# .env file
+.env
+
 # Build artifacts
 build/
 __debug_bin*

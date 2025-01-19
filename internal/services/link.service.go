@@ -5,6 +5,7 @@ import (
 
 	"github.com/LeonYalin/golang-todo-list-app/api"
 	"github.com/LeonYalin/golang-todo-list-app/internal/models"
+	"github.com/google/uuid"
 	"github.com/lithammer/shortuuid/v4"
 )
 
@@ -37,7 +38,7 @@ func (this *LinkService) GetAllLinks(request api.GetAllLinksRequest) (api.GetAll
 }
 
 func (this *LinkService) CreateLink(request api.CreateLinkRequest) (api.CreateLinkResponse, error) {
-	createdLink, err := this.repo.Create(request.Original, fmt.Sprintf("/l/%s", shortuuid.New()))
+	createdLink, err := this.repo.Create(uuid.NewString(), request.Original, fmt.Sprintf("/l/%s", shortuuid.New()))
 	if err != nil {
 		return api.CreateLinkResponse{}, err
 	}

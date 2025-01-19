@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"html/template"
 	"sync"
 
@@ -22,7 +23,9 @@ func NewApp() *App {
 	once.Do(func() {
 		e := echo.New()
 		e.File("/", "public/index.html")
+		e.Static("/css", "static/css")
 		e.Static("/js", "static/js")
+		e.Static("/img", "static/img")
 		e.Renderer = &helpers.Template{Templates: template.Must(template.ParseGlob("public/views/*.html"))}
 		e.Validator = &helpers.RequestValidator{Validator: validator.New()}
 
@@ -40,7 +43,11 @@ func NewApp() *App {
 		// link htmx routes
 		linkHtmxController := controllers.NewLinkHtmxController()
 		g2 := e.Group("/htmx")
-		g2.POST("/links", linkHtmxController.GetAllLinks)
+		g2.GET("/links", linkHtmxController.GetAllLinks)
+
+		// init data
+		dbInitializer := helpers.NewDbInitializer(linkRepo)
+		dbInitializer.InitData()
 
 		app = &App{
 			e: e,
@@ -52,4 +59,11 @@ func NewApp() *App {
 
 func (app *App) Start() {
 	app.e.Logger.Fatal(app.e.Start(":3001"))
+}
+
+func (app *App) Stop() {
+	err := app.e.Shutdown(context.Background())
+	if err != nil {
+		app.e.Logger.Error("error shutting down app")
+	}
 }

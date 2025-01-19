@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-var link = models.Link{Id: uuid.NewString(), Original: "https://www.google.com", Short: "http://c/lala"}
+var link = models.Link{Id: uuid.NewString(), Original: "https://www.google.com", Short: "/l/lala"}
 
 func TestLinkService(t *testing.T) {
 	suite.Run(t, new(LinkServiceTestSuite))
