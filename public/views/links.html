@@ -1,1 +1,4 @@
-Hello, {{.}}!
+{{range $link := .Links}}
+  {{ template "link.html" $link }}
+{{end}}
+

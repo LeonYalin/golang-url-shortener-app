@@ -1,0 +1,16 @@
+<div class="modal-box">
+  <form
+    hx-post="/htmx/links/{{.}}/delete_link_confirm_click"
+    hx-target="#links"
+    method="dialog"
+  >
+    <h3 class="text-lg font-bold">Delete URL</h3>
+    <p class="py-4">Are you sure you want to delete the URL?</p>
+    <div class="modal-action">
+      <button type="button" class="btn" onclick="my_modal.close()">
+        Cancel
+      </button>
+      <button type="submit" class="btn" onclick="my_modal.close()">Yes</button>
+    </div>
+  </form>
+</div>

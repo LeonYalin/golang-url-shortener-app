@@ -22,7 +22,7 @@ var app *App
 func NewApp() *App {
 	once.Do(func() {
 		e := echo.New()
-		e.File("/", "public/index.html")
+		e.File("/", "public/views/index.html")
 		e.Static("/css", "static/css")
 		e.Static("/js", "static/js")
 		e.Static("/img", "static/img")
@@ -33,17 +33,26 @@ func NewApp() *App {
 		linkRepo := services.NewLinkRepository()
 		linkService := services.NewLinkService(linkRepo)
 		linkController := controllers.NewLinkController(linkService)
-		g := e.Group("/links")
-		g.GET("", linkController.GetAllLinks)
-		g.GET("/:id", linkController.GetLinkById)
-		g.POST("", linkController.CreateLink)
-		g.PUT("/:id", linkController.UpdateLink)
-		g.DELETE("/:id", linkController.DeleteLink)
+		gLinks := e.Group("/links")
+		gLinks.GET("", linkController.GetAllLinks)
+		gLinks.GET("/:id", linkController.GetLinkById)
+		gLinks.POST("", linkController.CreateLink)
+		gLinks.PUT("/:id", linkController.UpdateLink)
+		gLinks.DELETE("/:id", linkController.DeleteLink)
 
-		// link htmx routes
+		// htmx routes
+		gHtmx := e.Group("/htmx")
+
+		// htmx link routes
+		gHtmxLinks := gHtmx.Group("/links")
 		linkHtmxController := controllers.NewLinkHtmxController()
-		g2 := e.Group("/htmx")
-		g2.GET("/links", linkHtmxController.GetAllLinks)
+		gHtmxLinks.GET("", linkHtmxController.GetAllLinks)
+		gHtmxLinks.POST("/create_link_click", linkHtmxController.CreateLinkClick)
+		gHtmxLinks.POST("/create_link_confirm_click", linkHtmxController.CreateLinkClickConfirmClick)
+		gHtmxLinks.POST("/:id/delete_link_click", linkHtmxController.DeleteLinkClick)
+		gHtmxLinks.POST("/:id/delete_link_confirm_click", linkHtmxController.DeleteLinkConfirmClick)
+		gHtmxLinks.POST("/:id/edit_link_click", linkHtmxController.EditLinkClick)
+		gHtmxLinks.POST("/:id/edit_link_confirm_click", linkHtmxController.EditLinkConfirmClick)
 
 		// init data
 		dbInitializer := helpers.NewDbInitializer(linkRepo)

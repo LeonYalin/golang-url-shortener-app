@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Url Shortener</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/vendor/daisyui.min.css" />
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <script src="/js/vendor/htmx.min.js"></script>
+    <script src="/js/vendor/tailwindcss.js"></script>
+  </head>
+  <body class="w-screen h-screen">
+    <div id="app" class="flex flex-col items-center h-full w-full">
+      <!-- Loader -->
+      <img
+        id="loader"
+        class="htmx-indicator"
+        alt="loading links.."
+        width="50"
+        src="/img/loader.svg"
+      />
+
+      <!-- Header -->
+      <div class="flex items-center bg-[#126efd] p-0 m-0 h-[44px] w-full">
+        <img src="/img/logo.png" alt="Logo" width="44px" height="44px" />
+        <div class="text-sm text-white">URL Shortener</div>
+      </div>
+
+      <!-- Title -->
+      <div id="title" class="w-full max-w-[400px] text-center my-10">
+        <h3 class="text-[25px] font-bold">Free URL Shortener</h3>
+        <h6 class="my-1 text-[#7d858d]">
+          Create short & memorable links in seconds.
+        </h6>
+        <button
+          class="btn btn-primary bg-[#126efd] w-full"
+          hx-post="/htmx/links/create_link_click"
+          hx-target="#my_modal"
+          onclick="my_modal.showModal()"
+        >
+          ADD URL
+        </button>
+      </div>
+
+      <!-- Modal - Open the modal using ID.showModal() method -->
+      <dialog id="my_modal" class="modal">
+        <!-- <div class="modal-box">
+          <h3 class="text-lg font-bold">Hello!</h3>
+          <p class="py-4">Press ESC key or click the button below to close</p>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div> -->
+      </dialog>
+
+      <!-- Links -->
+      <div
+        id="links"
+        class="flex items-center"
+        hx-get="/htmx/links"
+        hx-trigger="load"
+        hx-indicator="#loader"
+      ></div>
+
+      <!-- Create Link -->
+      <div
+        id="create-link"
+        style="display: none"
+        hx-trigger="afterOnLoad from:#links"
+      >
+        Create Link
+      </div>
+    </div>
+  </body>
+</html>

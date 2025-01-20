@@ -1,0 +1,22 @@
+<div class="modal-box">
+  <form
+    hx-post="/htmx/links/create_link_confirm_click"
+    hx-target="#links"
+    method="dialog"
+  >
+    <h3 class="text-lg font-bold">Add a new URL</h3>
+    <p class="py-4">
+      <input
+        autofocus
+        name="original"
+        placeholder="Enter the original URL address"
+        class="input input-bordered w-full"
+      />
+    </p>
+    <div class="modal-action">
+      <button type="submit" class="btn" onclick="my_modal.close()">
+        Create
+      </button>
+    </div>
+  </form>
+</div>

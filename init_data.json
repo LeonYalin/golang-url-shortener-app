@@ -2,8 +2,13 @@
   "links": [
     {
       "id": "1",
-      "original": "http://www.google.com",
+      "original": "https://angular.dev/",
       "short": "/l/lala"
+    },
+    {
+      "id": "2",
+      "original": "https://react.dev/",
+      "short": "/l/papa"
     }
   ]
 }

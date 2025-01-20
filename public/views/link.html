@@ -1,0 +1,32 @@
+<div class="card bg-slate-200 dark:bg-slate-800 w-96 shadow-xl m-4 pt-8">
+  <figure>
+    <iframe
+      src="{{.Original}}"
+      alt="Shoes"
+      frameborder="0"
+      style="height: 180px"
+    ></iframe>
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title break-all">Original: {{.Original}}</h2>
+    <p>Short: {{.Short}}</p>
+    <div class="card-actions justify-end">
+      <button
+        class="btn btn-error"
+        hx-post="/htmx/links/{{.Id}}/delete_link_click"
+        hx-target="#my_modal"
+        onclick="my_modal.showModal()"
+      >
+        Delete
+      </button>
+      <button
+        class="btn btn-primary bg-[#126efd]"
+        hx-post="/htmx/links/{{.Id}}/edit_link_click"
+        hx-target="#my_modal"
+        onclick="my_modal.showModal()"
+      >
+        Edit
+      </button>
+    </div>
+  </div>
+</div>
