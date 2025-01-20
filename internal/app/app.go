@@ -54,6 +54,10 @@ func NewApp() *App {
 		gHtmxLinks.POST("/:id/edit_link_click", linkHtmxController.EditLinkClick)
 		gHtmxLinks.POST("/:id/edit_link_confirm_click", linkHtmxController.EditLinkConfirmClick)
 
+		// short routes
+		gShort := e.Group("/l")
+		gShort.GET("/:short", linkController.GetLinkByShort)
+
 		// init data
 		dbInitializer := helpers.NewDbInitializer(linkRepo)
 		dbInitializer.InitData()

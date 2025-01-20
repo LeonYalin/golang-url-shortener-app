@@ -12,6 +12,7 @@ type ILinkRepository interface {
 	Create(id string, original string, short string) (*models.Link, error)
 	Update(id string, original string) (*models.Link, error)
 	GetById(id string) (*models.Link, error)
+	GetByShort(short string) (*models.Link, error)
 	Delete(id string) (*models.Link, error)
 }
 
@@ -48,6 +49,22 @@ func (this *LinkRepository) GetById(id string) (*models.Link, error) {
 	this.lock.Lock()
 	defer this.lock.Unlock()
 	if link, exists := this.links[id]; !exists {
+		return nil, errors.New("link does not exist")
+	} else {
+		return link, nil
+	}
+}
+
+func (this *LinkRepository) GetByShort(short string) (*models.Link, error) {
+	this.lock.Lock()
+	defer this.lock.Unlock()
+	var link *models.Link
+	for _, l := range this.links {
+		if l.Short == short {
+			link = l
+		}
+	}
+	if link == nil {
 		return nil, errors.New("link does not exist")
 	} else {
 		return link, nil

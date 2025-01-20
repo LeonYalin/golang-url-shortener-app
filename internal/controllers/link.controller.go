@@ -42,6 +42,17 @@ func (this *LinkController) GetLinkById(c echo.Context) error {
 	return c.JSON(http.StatusOK, requestedLink)
 }
 
+func (this *LinkController) GetLinkByShort(c echo.Context) error {
+	short := c.Param("short")
+	slog.Info("(LinkController:GetLinkByShort) enter", slog.Any("short", short))
+	res, err := this.service.GetLinkByShort(short)
+	if err != nil {
+		return err
+	}
+	slog.Info("(LinkController:GetLinkByShort)", slog.Any("requested_link", res))
+	return c.Redirect(http.StatusPermanentRedirect, res.Link.Original)
+}
+
 func (this *LinkController) CreateLink(c echo.Context) error {
 	slog.Info("(LinkController:CreateLink) enter")
 	request := api.CreateLinkRequest{}

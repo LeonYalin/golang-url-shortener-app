@@ -14,6 +14,7 @@ type ILinkService interface {
 	CreateLink(request api.CreateLinkRequest) (api.CreateLinkResponse, error)
 	UpdateLink(request api.UpdateLinkRequest, id string) (api.UpdateLinkResponse, error)
 	GetLinkById(id string) (api.GetLinkByIdResponse, error)
+	GetLinkByShort(short string) (api.GetLinkByShortResponse, error)
 	DeleteLink(id string) (api.DeleteLinkResponse, error)
 }
 
@@ -43,6 +44,14 @@ func (this *LinkService) CreateLink(request api.CreateLinkRequest) (api.CreateLi
 		return api.CreateLinkResponse{}, err
 	}
 	return api.CreateLinkResponse{Link: *createdLink}, nil
+}
+
+func (this *LinkService) GetLinkByShort(short string) (api.GetLinkByShortResponse, error) {
+	link, err := this.repo.GetByShort(fmt.Sprintf("/l/%s", short))
+	if err != nil {
+		return api.GetLinkByShortResponse{}, err
+	}
+	return api.GetLinkByShortResponse{Link: *link}, nil
 }
 
 func (this *LinkService) GetLinkById(id string) (api.GetLinkByIdResponse, error) {

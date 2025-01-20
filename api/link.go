@@ -16,6 +16,11 @@ type GetAllLinksResponse struct {
 	Total    int           `json:"total"`    // total results
 }
 
+// Get link by Short
+type GetLinkByShortResponse struct {
+	Link models.Link `json:"link"` // requested link
+}
+
 // Get link by ID
 type GetLinkByIdResponse struct {
 	Link models.Link `json:"link"` // requested link

@@ -20,7 +20,7 @@ import (
 )
 
 var linkJSON = `{"original": "https://www.google.com"}`
-var link = models.Link{Id: uuid.NewString(), Original: "https://www.google.com", Short: "http://c/lala"}
+var link = models.Link{Id: uuid.NewString(), Original: "https://www.google.com", Short: "/l/lala"}
 
 func TestLinkController(t *testing.T) {
 	suite.Run(t, new(LinkControllerSuite))
@@ -89,6 +89,27 @@ func (this *LinkControllerSuite) TestGetLinkById() {
 	err = json.Unmarshal(rec.Body.Bytes(), &response)
 	assert.NoError(this.T(), err)
 	assert.Equal(this.T(), response.Link, link)
+}
+
+func (this *LinkControllerSuite) TestGetLinkByShort() {
+	// Arrange
+	req := httptest.NewRequest(http.MethodGet, "/:short", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := this.e.NewContext(req, rec)
+	c.SetParamNames("short")
+	c.SetParamValues(link.Short)
+	this.controller.service.(*services.MockLinkService).GetLinkByShortFunc = func(id string) (api.GetLinkByShortResponse, error) {
+		return api.GetLinkByShortResponse{Link: link}, nil
+	}
+
+	// Act
+	err := this.controller.GetLinkByShort(c)
+
+	// Assert
+	assert.NoError(this.T(), err)
+	assert.Equal(this.T(), http.StatusPermanentRedirect, rec.Code)
+	assert.Equal(this.T(), link.Original, rec.Header().Get("Location"))
 }
 
 func (this *LinkControllerSuite) TestCreateLink() {

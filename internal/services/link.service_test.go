@@ -2,6 +2,7 @@ package services_test
 
 import (
 	// "errors"
+	"regexp"
 	"testing"
 
 	"github.com/LeonYalin/golang-todo-list-app/api"
@@ -65,6 +66,24 @@ func (this *LinkServiceTestSuite) TestGetLinkById() {
 	res, err := this.service.GetLinkById(createLinkRes.Link.Id)
 	assert.NoError(this.T(), err)
 	assert.Equal(this.T(), res.Link.Original, link.Original)
+}
+
+func (this *LinkServiceTestSuite) TestGetLinkByShort() {
+	// No links, should fail
+	_, err := this.service.GetLinkByShort("lala")
+	assert.Error(this.T(), err)
+	assert.EqualError(this.T(), err, "link does not exist")
+
+	// Insert a link
+	createLinkReq := api.CreateLinkRequest{Original: link.Original}
+	createLinkRes, err := this.service.CreateLink(createLinkReq)
+	assert.NoError(this.T(), err)
+	assert.Equal(this.T(), createLinkRes.Link.Original, link.Original)
+
+	// Get link by short
+	res, err := this.service.GetLinkByShort(regexp.MustCompile(`^/l/`).ReplaceAllString(createLinkRes.Link.Short, ""))
+	assert.NoError(this.T(), err)
+	assert.Equal(this.T(), res.Link.Short, createLinkRes.Link.Short)
 }
 
 func (this *LinkServiceTestSuite) TestUpdateLink() {
